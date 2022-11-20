@@ -2,13 +2,13 @@ import cv2
 import numpy as np
 from matplotlib import pyplot as plt
 
-def initialize_camera(width, height):
+def initialize_camera(width, height, number):
     '''
     Función para inicializar cámara
     '''
     # 640.0 x 480.0
     # 1280.0 x 720.0
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(number)
     cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
     cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
     width = cap.get(cv2.CAP_PROP_FRAME_WIDTH)
@@ -36,15 +36,13 @@ def open_camera_with_mask(cap, lower_color, upper_color):
         ret, frame = cap.read()
         rgb_video = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
         # hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
-        
         lower_mask = np.array(lower_color)
-        upper_mask = np.array(upper_color)
-
+        upper_mask = np.array(upper_color)   
         mask = cv2.inRange(rgb_video, lower_mask, upper_mask)
-        res = cv2.bitwise_and(frame, frame, mask= mask)
+        res = cv2.bitwise_and(frame, frame, mask=mask)
         
-        cv2.imshow('frame', frame)
-        cv2.imshow('res', res)
+        # cv2.imshow('frame', frame)
+        # cv2.imshow('res', res)
         if np.mean(mask) > 0:
             img_point, position = get_img_point(frame, mask)
             cv2.imshow('img_point', img_point)
@@ -53,3 +51,15 @@ def open_camera_with_mask(cap, lower_color, upper_color):
     print('Closing camera...')
     cap.release()
     cv2.destroyAllWindows()
+
+def open_camera_tkinter(number, width, height, lower_color, upper_color):
+    try:
+        width = int(width)
+        height = int(height)
+        lower_color = list(map(int, lower_color.split()))
+        upper_color = list(map(int, upper_color.split()))
+    except:
+        return False
+    cap = initialize_camera(width, height, number)
+    open_camera_with_mask(cap, lower_color, upper_color)
+    return True
