@@ -10,9 +10,6 @@ myWindow.geometry("985x450")
 myWindow.title("Detección de Cámara")
 myWindow['bg'] = '#060836'
 
-tabla_hash = [-1,-1,-1,-1,-1,-1,-1,-1,-1,-1]
-hash_texto = ''
-
 Titulo=Label(text="Detección de Cámara" ,font=("Cambria",15),fg="#060836" , bg="#703ABE", width="893", height="3")
 
 Titulo.pack()
