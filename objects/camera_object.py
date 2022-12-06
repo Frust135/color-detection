@@ -50,13 +50,26 @@ class twoCameras():
         height_centimeters = px_height*2.54/96
         return [round(width_centimeters, 2), round(height_centimeters, 2)]
 
-    def create_new_canvas(self, position1, position2):
+    def create_new_canvas(self, points1, points2, actual_position1, actual_position2):
         blank_image = np.zeros((self.height,self.width,3), np.uint8)
-        cv2.circle(blank_image, (int(position1[0]), int(position1[1])), radius=10, color=(0, 0, 255), thickness=2)
-        cv2.circle(blank_image, (int(position2[0]), int(position2[1])), radius=10, color=(0, 0, 255), thickness=2)
+        tuple_points1 = (int(points1[0]), int(points1[1]))
+        tuple_points2 = (int(points2[0]), int(points2[1]))        
+        if actual_position1:
+            cv2.circle(blank_image, tuple_points1, radius=10, color=(0, 0, 255), thickness=2)
+            cv2.putText(blank_image, 'X (cm): {0} - Y (cm): {1}'.format(actual_position1[0], actual_position1[1]),
+                (int(points1[0])+20, int(points1[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color=(0, 0, 255), thickness=1
+            )
+        if actual_position2:
+            cv2.circle(blank_image, tuple_points2, radius=10, color=(0, 0, 255), thickness=2)
+            cv2.putText(blank_image, 'X (cm): {0} - Y (cm): {1}'.format(actual_position2[0], actual_position2[1]),
+                (int(points2[0])+20, int(points2[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color=(0, 0, 255), thickness=1
+            )
+        if actual_position1 and actual_position2:
+            cv2.line(blank_image, tuple_points1, tuple_points2, color=(0, 0, 255), thickness=5)
         return blank_image
 
     def open_camera_with_mask(self):
+        import time
         '''
         Abrir la camara aplicando una máscara
         '''
@@ -76,29 +89,29 @@ class twoCameras():
             upper_mask = np.array(self.upper_color)   
             position1 = position2 = (999,999)
             mask1 = cv2.inRange(rgb_video1, lower_mask, upper_mask)
-            mask2 = cv2.inRange(rgb_video2, lower_mask, upper_mask)            
+            mask2 = cv2.inRange(rgb_video2, lower_mask, upper_mask)
+            actual_position1 = None
+            actual_position2 = None
             print('###############')
             if np.mean(mask1) > 0:
                 img_point1, position1 = self.get_img_point(self.cap1, frame1, mask1)
                 actual_position1 = self.get_centimeter_position(self.cap1, position1)
                 print(camera_name_1+': X (cm):', actual_position1[0], '- Y (cm):', actual_position1[1])
                 cv2.imshow(camera_name_1, img_point1)
-                flag_camera1 = True
             else:
-                cv2.imshow(camera_name_1, frame1)
                 print(camera_name_1+': Sin señal...')
+                cv2.imshow(camera_name_1, frame1)                
             
             if np.mean(mask2) > 0:
                 img_point2, position2 = self.get_img_point(self.cap2, frame2, mask2)
                 actual_position2 = self.get_centimeter_position(self.cap2, position2)
                 print(camera_name_2+': X (cm):', actual_position2[0], '- Y (cm):', actual_position2[1])
                 cv2.imshow(camera_name_2, img_point2)
-                flag_camera2 = True
             else:
-                cv2.imshow(camera_name_2, frame2)
                 print(camera_name_2+': Sin señal...')
+                cv2.imshow(camera_name_2, frame2)                
             
-            canvas = self.create_new_canvas(position1, position2)
+            canvas = self.create_new_canvas(position1, position2, actual_position1, actual_position2)
             cv2.imshow('Canvas', canvas)
 
             if cv2.waitKey(1) & 0xFF == ord('q'): break
