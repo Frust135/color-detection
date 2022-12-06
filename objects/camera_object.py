@@ -53,7 +53,8 @@ class twoCameras():
     def create_new_canvas(self, points1, points2, actual_position1, actual_position2):
         blank_image = np.zeros((self.height,self.width,3), np.uint8)
         tuple_points1 = (int(points1[0]), int(points1[1]))
-        tuple_points2 = (int(points2[0]), int(points2[1]))        
+        tuple_points2 = (int(points2[0]), int(points2[1]))
+        cv2.circle(blank_image, (int(self.width/2), int(self.height/2)), radius=1, color=(0, 0, 255), thickness=2)
         if actual_position1:
             cv2.circle(blank_image, tuple_points1, radius=10, color=(0, 0, 255), thickness=2)
             cv2.putText(blank_image, 'X (cm): {0} - Y (cm): {1}'.format(actual_position1[0], actual_position1[1]),
