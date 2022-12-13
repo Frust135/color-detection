@@ -8,6 +8,6 @@ if __name__ == "__main__":
         camID2=sys.argv[2],
         width=sys.argv[3],
         height=sys.argv[4],
-        lower_color=[1, 220, 150],
-        upper_color=[10, 240, 190]
+        lower_color=[1, 220, 150], # Mínimo del Rango
+        upper_color=[10, 240, 190] # Máximo del Rango
     )
