@@ -56,16 +56,14 @@ class twoCameras():
         tuple_points2 = (int(points2[0]), int(points2[1]))
         cv2.circle(blank_image, (int(self.width/2), int(self.height/2)), radius=1, color=(0, 0, 255), thickness=2)
         if actual_position1:
-            if tuple_points1[1] > (self.height/3)*2: camera_position1 = 'C'
-            elif tuple_points1[1] < (self.height/3)*2 and tuple_points1[1] > self.height/3: camera_position1 = 'B'
+            if tuple_points1[1] < (self.height/2): camera_position1 = 'B'
             else: camera_position1 = 'A'
             cv2.circle(blank_image, tuple_points1, radius=10, color=(0, 0, 255), thickness=2)
             cv2.putText(blank_image, '{0} - X (cm): {1} - Y (cm): {2}'.format(camera_position1 ,actual_position1[0], actual_position1[1]),
                 (int(points1[0])+20, int(points1[1])), cv2.FONT_HERSHEY_SIMPLEX, 0.5, color=(0, 0, 255), thickness=1
             )
         if actual_position2:
-            if tuple_points2[1] > (self.height/3)*2: camera_position2 = 'C'
-            elif tuple_points2[1] < (self.height/3)*2 and tuple_points2[1] > self.height/3: camera_position2 = 'B'
+            if tuple_points2[1] < (self.height/2): camera_position2 = 'B'
             else: camera_position2 = 'A'
             cv2.circle(blank_image, tuple_points2, radius=10, color=(0, 0, 255), thickness=2)
             cv2.putText(blank_image, '{0} - X (cm): {0} - Y (cm): {1}'.format(camera_position2, actual_position2[0], actual_position2[1]),
