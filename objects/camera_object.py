@@ -51,6 +51,9 @@ class twoCameras():
         return [round(width_centimeters, 2), round(height_centimeters, 2)]
 
     def create_new_canvas(self, points1, points2, actual_position1, actual_position2):
+        '''
+        Genera un nuevo Canvas vacío en donde situa los círculos obtenidos, y la información de los mismos (centimetros y si esta en la posición A o B)
+        '''
         blank_image = np.zeros((self.height,self.width,3), np.uint8)
         tuple_points1 = (int(points1[0]), int(points1[1]))
         tuple_points2 = (int(points2[0]), int(points2[1]))
@@ -76,7 +79,7 @@ class twoCameras():
     def open_camera_with_mask(self):
         import time
         '''
-        Abrir la camara aplicando una máscara
+        Abrir la camara aplicando el rango
         '''
         print('#################')
         print('Opening camera...')
